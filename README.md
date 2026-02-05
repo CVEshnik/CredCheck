@@ -5,7 +5,9 @@ The result was CredCheck — it analyzes output from NmapAnalyzer and attempts t
 # How to use CredCheck
 
 After cloning the repository, you need to run [NmapAnalyzer](https://github.com/cvebezr/NmapAnalyzer).
-```./NmapAnalyzer.py 192.168.1.0/24 -D credcheck_scan --credcheck```
+```
+./NmapAnalyzer.py 192.168.1.0/24 -D credcheck_scan --credcheck
+```
 
 After the scan completes, a directory named "СС" will be created with the required structure.
 ```
