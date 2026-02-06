@@ -49,7 +49,7 @@ time.sleep(3)
 
 class PentestTool:
     def __init__(self, credentials_file='standard_credentials.json'):
-        """Initialize pentest tool with credentials database."""
+        
         self.credentials_file = credentials_file
         self.credentials = self.load_credentials()
         self.port_service_map = {
@@ -68,7 +68,7 @@ class PentestTool:
         }
         
     def load_credentials(self):
-        """Load credentials from JSON file."""
+        
         try:
             with open(self.credentials_file, 'r') as f:
                 return json.load(f)
@@ -80,7 +80,7 @@ class PentestTool:
             sys.exit(1)
     
     def scan_directory(self, directory_path):
-        """Scan directory for port-based subdirectories and host files."""
+        
         results = {}
         base_path = Path(directory_path)
         
@@ -106,7 +106,7 @@ class PentestTool:
         return results
     
     def test_ssh(self, host, port, credentials):
-        """Test SSH credentials using NetExec."""
+        
         for cred in credentials:
             cmd = [
                 'nxc', 'ssh',
@@ -133,7 +133,7 @@ class PentestTool:
         return None
     
     def test_ftp(self, host, port, credentials):
-        """Test FTP credentials using NetExec."""
+        
         for cred in credentials:
             cmd = [
                 'nxc', 'ftp',
@@ -160,7 +160,7 @@ class PentestTool:
         return None
     
     def test_mssql(self, host, port, credentials):
-        """Test MSSQL credentials using NetExec."""
+        
         for cred in credentials:
             cmd = [
                 'nxc', 'mssql',
@@ -213,7 +213,7 @@ class PentestTool:
         return None
     
     def test_postgresql(self, host, port, credentials):
-        """Test PostgreSQL credentials."""
+        
         for cred in credentials:
             try:
                 import psycopg2
@@ -238,7 +238,7 @@ class PentestTool:
         return None
     
     def test_mysql(self, host, port, credentials):
-        """Test MySQL/MariaDB credentials."""
+        
         for cred in credentials:
             try:
                 import mysql.connector
@@ -263,7 +263,7 @@ class PentestTool:
         return None
     
     def test_redis(self, host, port, credentials):
-        """Test Redis credentials."""
+        
         for cred in credentials:
             try:
                 import redis
@@ -286,7 +286,7 @@ class PentestTool:
         return None
     
     def test_snmp(self, host, port, credentials):
-        """Test SNMP community strings."""
+        
         for cred in credentials:
             cmd = [
                 'snmpwalk',
@@ -309,7 +309,7 @@ class PentestTool:
         return None
     
     def test_service(self, service, host, port):
-        """Test a single service on a single host."""
+        
         print(f"Testing {service} on {host}:{port}")
         
         if service not in self.credentials:
@@ -333,7 +333,7 @@ class PentestTool:
         return None
     
     def run_scan(self, directory_path, max_workers=10):
-        """Run full pentest scan on directory structure."""
+        
         print(f"Starting scan on directory: {directory_path}")
         print("=" * 50)
         
@@ -349,13 +349,13 @@ class PentestTool:
         results = []
         tasks = []
         
-        # Prepare all tasks
+        
         for service, data in services_data.items():
             port = data['port']
             for host in data['hosts']:
                 tasks.append((service, host, port))
         
-        # Execute tasks with thread pool
+        
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             future_to_task = {
                 executor.submit(self.test_service, service, host, port): (service, host, port)
@@ -377,13 +377,13 @@ class PentestTool:
         return results
     
     def save_results(self, results, output_file='spraying_results.json'):
-        """Save results to JSON file."""
+        
         with open(output_file, 'w') as f:
             json.dump(results, f, indent=2)
         print(f"\nResults saved to {output_file}")
     
     def print_summary(self, results):
-        """Print summary of results."""
+        
         print("\n" + "=" * 50)
         print("SCAN SUMMARY")
         print("=" * 50)
@@ -402,7 +402,7 @@ class PentestTool:
             print(f"Password/Community: {result.get('password', result.get('community', 'N/A'))}")
 
 def main():
-    """Main function."""
+    
     if len(sys.argv) != 2:
         print("Usage: python pentest_tool.py <directory_path>")
         print("Example: python pentest_tool.py ./scan_results")
@@ -410,13 +410,13 @@ def main():
     
     directory_path = sys.argv[1]
     
-    # Initialize tool
+    
     tool = PentestTool()
     
-    # Run scan
+    
     results = tool.run_scan(directory_path)
     
-    # Save and display results
+    
     tool.save_results(results)
     tool.print_summary(results)
 
